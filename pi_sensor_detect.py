@@ -42,23 +42,23 @@ tsl2561_addresses = [0x29,0x39,0x49]
 ssd130x_addresses = [0x35,0x36]
 ds1307_addresses = [0x68]
 
-#####################################################################################
+#######################################################################################
 #
 #  The Raspberry Pi I2C buses need to be enabled in /boot/config.txt like this:
 #
-#  for I2C-0: # for SDA = GPIO0 (pin 27) and SCL = GPIO1 (pin 28)        - fixed pin #
-#  ==========
+#  for I2C-0:   with SDA = GPIO0 (pin 27) and SCL = GPIO1 (pin 28)        - fixed pin #
+#  ====================================================================================
 #  dtparam=i2c_arm=on
 #
-#  for I2C-1: # for SDA = GPIO2 (pin 3) and SCL = GPIO3 (pin 5)          - fixed pin #
-#  ==========
+#  for I2C-1:   with SDA = GPIO2 (pin 3) and SCL = GPIO3 (pin 5)          - fixed pin #
+#  ====================================================================================
 #  dtparam=i2c_vc=on
 #
-#  for I2c-4  # for SDA = GPIO6 (pin 31) and SCL = GPIO7 (pin 26) - configurable pin #
-#  ==========
+#  for I2c-4    with SDA = GPIO6 (pin 31) and SCL = GPIO7 (pin 26) - configurable pin #
+#  ====================================================================================
 #  dtoverlay=i2c-gpio,bus=4,i2c_gpio_delayUs=1,i2c_gpio_sda=6,i2c_gpio_scl=7
 #
-#####################################################################################
+#######################################################################################
 i2c0 = I2C(0)
 i2c1 = I2C(1)
 i2c4 = I2C(4)
