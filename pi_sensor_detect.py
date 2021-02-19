@@ -13,7 +13,6 @@
 # sudo pip3 install adafruit-circuitpython-scd30
 # sudo pip3 install adafruit-circuitpython-tsl2561
 # sudo pip3 install adafruit-circuitpython-ssd1305
-# sudo pip3 install adafruit-circuitpython-ssd1305
 # sudo pip3 install adafruit-circuitpython-ssd1306
 # sudo pip3 install adafruit-circuitpython-ds1307
 #
@@ -152,9 +151,13 @@ def bus_scan(i2c,devices):
                 print("SSD130x display at: ",hex(device))
                 try:
                     display = SSD1305_I2C(i2c)
-                    print("display initialized")
+                    print("SSD1305 initialized")
                 except OSError:
-                    print("display doesn't respond")
+                    try:
+                        display = SSD1306_I2C(i2c)
+                        print("SSD1306 initialized")
+                    except OSError:
+                        print("display doesn't respond")
         for address in ds1307_addresses:
             if device == address:
                 print("DS1307 RTC at: ",hex(device))
