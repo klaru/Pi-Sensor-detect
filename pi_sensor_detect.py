@@ -7,6 +7,7 @@
 # sudo pip3 install adafruit-circuitpython-ahtx0
 # sudo pip3 install adafruit-circuitpython-bh1750
 # sudo pip3 install adafruit-circuitpython-bme280
+# sudo pip3 install adafruit-circuitpython-bme680
 # sudo pip3 install adafruit-circuitpython-sht31d
 # sudo pip3 install adafruit-circuitpython-sgp30
 # sudo pip3 install adafruit-circuitpython-sgp40
@@ -21,6 +22,7 @@ from adafruit_extended_bus import ExtendedI2C as I2C
 from adafruit_ahtx0 import AHTx0
 from adafruit_bh1750 import BH1750
 from adafruit_bme280 import Adafruit_BME280_I2C as BME280
+from adafruit_bme680 import Adafruit_BME680_I2C as BME680
 from adafruit_sht31d import SHT31D
 from adafruit_sgp30 import Adafruit_SGP30 as SGP30
 from adafruit_sgp40 import SGP40
@@ -38,8 +40,11 @@ sgp30_addresses = [0x58]
 sgp40_addresses = [0x59]
 scd30_addresses = [0x61]
 tsl2561_addresses = [0x29,0x39,0x49]
-ssd130x_addresses = [0x35,0x36]
+ssd130x_addresses = [0x3C,0x3D]
 ds1307_addresses = [0x68]
+
+BME680_REG_CHIPID = 0xD0
+BME680_CHIPID = 0x61
 
 #######################################################################################
 #
@@ -77,19 +82,31 @@ def bus_scan(i2c,devices):
         for address in bmx_addresses:
             if device == address:
                 print("BMx temperature, humidity sensor at: ",hex(device))
-                try:
-                    sensor = BME280(i2c)
-                    print("sensor initialized")
-                    print("Temperature = %.0f °C"%sensor.temperature)
-                    print("Relative Humidity = %.0f %"%sensor.relative_humidity)
-                    print("Pressure = %.0f mbar"%sensor.pressure)
-                except OSError:
-                    print("sensor doesn't respond")
+                sensor = BME680(address=address, i2c=i2c)
+                if sensor._read_byte(BME680_REG_CHIPID) == BME680_CHIPID:
+                    try:
+                        sensor = BME680(address=address,i2c=i2c)
+                        print("sensor initialized")
+                        print("Temperature = %0.0f °C" % sensor.temperature)
+                        print("Relative Humidity = %0.0f %%" % sensor.relative_humidity)
+                        print("Pressure = %0.0f mbar" % sensor.pressure)
+                        print("Gas = %d kohm" % (sensor.gas/1000))
+                    except OSError:
+                        print("sensor doesn't respond")
+                else:
+                    try:
+                        sensor = BME280(address=address,i2c=i2c)
+                        print("sensor initialized")
+                        print("Temperature = %.0f °C" % sensor.temperature)
+                        print("Relative Humidity = %.0f %" % sensor.relative_humidity)
+                        print("Pressure = %.0f mbar" % sensor.pressure)
+                    except OSError:
+                        print("sensor doesn't respond")
         for address in bh1750_addresses:
             if device == address:
                 print("BH1750 light intensity sensor at: ",hex(device))
                 try:
-                    sensor = BH1750(i2c)
+                    sensor = BH1750(i2c,address=address)
                     print("sensor initialized")
                     print("Light intensity = %.0f Lux"%sensor.lux)
                 except OSError:
@@ -127,7 +144,7 @@ def bus_scan(i2c,devices):
             if device == address:
                 print("SCD30 Temperature, Humidity & CO2 sensor at: ",hex(device))
                 try:
-                    sensor = SCD30(i2c)
+                    sensor = SCD30(i2c,address=address)
                     print("sensor initialized")
                     print("Temperature = %.0f °C"%sensor.temperature)
                     print("Relative Humidity = %.0f %"%sensor.relative_humidity)
@@ -138,7 +155,7 @@ def bus_scan(i2c,devices):
             if device == address:
                 print("TSL2561 light intensity sensor at: ",hex(device))
                 try:
-                    sensor = TSL2561(i2c)
+                    sensor = TSL2561(i2c,address=address)
                     print("sensor initialized")
                     print("Light intensity = %.0f Lux"%sensor.lux)
                     print("Broadband = %.0f"%sensor.broadband)
@@ -150,7 +167,7 @@ def bus_scan(i2c,devices):
             if device == address:
                 print("SSD130x display at: ",hex(device))
                 try:
-                    display = SSD1305_I2C(i2c)
+                    display = SSD1305_I2C(64,48,i2c,addr=address)
                     print("SSD1305 initialized")
                 except OSError:
                     try:
