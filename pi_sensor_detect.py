@@ -21,7 +21,7 @@
 from adafruit_extended_bus import ExtendedI2C as I2C
 from adafruit_ahtx0 import AHTx0
 from adafruit_bh1750 import BH1750
-from adafruit_bme280 import Adafruit_BME280_I2C as BME280
+from adafruit_bme280 import basic as BME280
 from adafruit_bme680 import Adafruit_BME680_I2C as BME680
 from adafruit_sht31d import SHT31D
 from adafruit_sgp30 import Adafruit_SGP30 as SGP30
