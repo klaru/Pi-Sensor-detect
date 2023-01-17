@@ -63,9 +63,10 @@ BME680_CHIPID = 0x61
 #  dtoverlay=i2c-gpio,bus=4,i2c_gpio_delayUs=1,i2c_gpio_sda=6,i2c_gpio_scl=7
 #
 #######################################################################################
-i2c0 = I2C(0)
-i2c1 = I2C(1)
-i2c4 = I2C(4)
+#i2c0 = I2C(0)
+#i2c1 = I2C(1)
+i2c2 = I2C(2)
+#i2c4 = I2C(4)
 
 def bus_scan(i2c,devices):
     for device in devices:
@@ -186,20 +187,25 @@ def bus_scan(i2c,devices):
                     print("rtc doesn't respond")
 
 def main():
-    print('Scan i2c-0 bus...')
-    devices = i2c0.scan()
-    print('i2c devices found on bus 0:',len(devices))
-    bus_scan(i2c0,devices)
+#    print('Scan i2c-0 bus...')
+#    devices = i2c0.scan()
+#    print('i2c devices found on bus 0:',len(devices))
+#    bus_scan(i2c0,devices)
 
-    print('Scan i2c-1 bus...')
-    devices = i2c1.scan()
-    print('i2c devices found on bus 1:',len(devices))
-    bus_scan(i2c1,devices)
+#    print('Scan i2c-1 bus...')
+#    devices = i2c1.scan()
+#    print('i2c devices found on bus 1:',len(devices))
+#    bus_scan(i2c1,devices)
 
-    print('Scan i2c-4 bus...')
-    devices = i2c4.scan()
-    print('i2c devices found on bus 4:',len(devices))
-    bus_scan(i2c4,devices)
+    print('Scan i2c-2 bus...')
+    devices = i2c2.scan()
+    print('i2c devices found on bus 2:',len(devices))
+    bus_scan(i2c2,devices)
+
+#    print('Scan i2c-4 bus...')
+#    devices = i2c4.scan()
+#    print('i2c devices found on bus 4:',len(devices))
+#    bus_scan(i2c4,devices)
 
 
 if __name__ == "__main__":
